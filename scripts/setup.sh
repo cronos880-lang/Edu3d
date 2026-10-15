@@ -13,3 +13,5 @@ else
 fi
 npm --prefix frontend ci --no-audit --no-fund --cache "$edu3d_cache_dir/npm"
 npm --prefix frontend run build
+npm --prefix browser ci --no-audit --no-fund --cache "$edu3d_cache_dir/npm"
+npm --prefix browser run build

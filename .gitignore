@@ -4,6 +4,8 @@ __pycache__/
 .pytest_cache/
 frontend/node_modules/
 frontend/dist/
+browser/node_modules/
+browser/dist/
 .local/
 *.log
 *.tsbuildinfo

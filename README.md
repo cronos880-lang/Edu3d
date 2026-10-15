@@ -1,5 +1,28 @@
 # Edu3d
 
+## Editor CAD en un único HTML
+
+La versión más reciente ejecuta el motor CAD **OpenCascade dentro del navegador**.
+No necesita instalar Python ni iniciar un servidor.
+
+**[Descargar Edu3d-Editor.html](https://github.com/cronos880-lang/Edu3d/raw/refs/heads/main/docs/Edu3d-Editor.html)**
+
+Descarga el archivo y ábrelo en Chrome, Edge, Firefox o Safari actualizado.
+El HTML incluye el motor CAD y funciona sin conexión. El ejemplo inicial es
+editable desde el árbol: boceto, agujeros, extrusión y soporte vertical.
+
+Incluye bocetos con dimensiones, extrusión, revolución, primitivas, booleanas,
+redondeo, chaflán, vaciado, movimiento, escala uniforme, patrones y simetría;
+importación STL/STEP, exportación STEP/STL, proyectos, historial y deshacer/rehacer.
+Los STL cerrados se convierten a sólidos facetados sobre los que se pueden crear
+operaciones. No se recupera automáticamente el historial original de cualquier STL.
+
+Código y compilación: [browser/README.md](browser/README.md).
+El HTML publicado se conserva en `docs/` junto al código de cada versión.
+Para servirlo con GitHub Pages, el origen de publicación es `main`, carpeta `/docs`.
+
+La documentación siguiente corresponde también a la aplicación Python original.
+
 Un entorno CAD personal para preparar piezas de impresión 3D: importar un STL,
 inspeccionarlo, crear un sólido editable y exportar geometría STEP real mediante
 OpenCascade. Interfaz en español, visor Three.js y motor CadQuery en Python.
@@ -46,8 +69,8 @@ No requiere cuentas, claves ni servicios externos para trabajar con las piezas.
 ## Abrir la aplicación desde GitHub
 
 La aplicación completa se puede ejecutar en **GitHub Codespaces**, con el motor
-CAD y la interfaz en el mismo espacio. GitHub Pages sirve archivos estáticos y
-no ejecuta el motor Python de esta versión.
+CAD y la interfaz en el mismo espacio. La aplicación Python necesita ese servidor;
+el editor HTML autónomo de `docs/` sí funciona en GitHub Pages.
 
 [Crear un Codespace de Edu3d](https://codespaces.new/cronos880-lang/Edu3d)
 

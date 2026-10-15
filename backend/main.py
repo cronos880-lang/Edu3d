@@ -27,7 +27,10 @@ from backend.mesh_solid import mesh_export_step, mesh_export_stl, mesh_preview
 
 
 MAX_UPLOAD_BYTES = 20 * 1024 * 1024
-FRONTEND_DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+FRONTEND_DIST = REPOSITORY_ROOT / "browser" / "dist"
+if not (FRONTEND_DIST / "index.html").is_file():
+    FRONTEND_DIST = REPOSITORY_ROOT / "frontend" / "dist"
 KERNEL_LOCK = Lock()
 
 FiniteNumber = Annotated[float, Field(strict=True, allow_inf_nan=False)]
@@ -235,8 +238,8 @@ def frontend(path: str = "") -> Response:
         return HTMLResponse(
             "<!doctype html><html lang='es'><meta charset='utf-8'>"
             "<title>Edu3d</title><h1>Edu3d</h1>"
-            "<p>La API está disponible. Compila la interfaz con "
-            "<code>cd frontend &amp;&amp; npm run build</code> "
+            "<p>La API está disponible. Prepara el editor con "
+            "<code>bash scripts/setup.sh</code> "
             "o inicia el servidor de desarrollo.</p></html>",
             status_code=503,
         )

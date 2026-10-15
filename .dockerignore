@@ -5,6 +5,9 @@
 **/__pycache__
 **/*.pyc
 frontend/node_modules
+browser/node_modules
+browser/dist
+docs
 frontend/dist
 *.log
 .env

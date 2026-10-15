@@ -1,0 +1,36 @@
+name: Actualizar HTML del editor
+on:
+  push:
+    branches: [main]
+    paths: ['browser/**', '.github/workflows/browser-html.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: browser-html
+  cancel-in-progress: false
+jobs:
+  build-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: browser/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: browser
+      - run: npm test
+        working-directory: browser
+      - run: npm run publish-html
+        working-directory: browser
+      - name: Guardar HTML actualizado en GitHub
+        run: |
+          git add docs/
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Update standalone CAD editor HTML'
+            git push
+          fi

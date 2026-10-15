@@ -1,0 +1,17 @@
+import {build} from 'esbuild';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import {gzipSync} from 'node:zlib';
+const require=createRequire(import.meta.url);
+const wasm=await readFile(require.resolve('replicad-opencascadejs/wasm'));
+const common={bundle:true,minify:true,write:false,target:'es2022',logLevel:'warning'};
+const worker=await build({...common,entryPoints:['src/kernel/worker.ts'],format:'iife',platform:'browser',external:['node:*'],define:{__EDU3D_WASM_BASE64__:JSON.stringify(gzipSync(wasm,{level:9}).toString('base64')),'import.meta.url':JSON.stringify('https://edu3d.invalid/inline-worker.js')}});
+const app=await build({...common,outfile:'app.js',entryPoints:['src/main.tsx'],format:'iife',platform:'browser',define:{'process.env.NODE_ENV':'"production"'}});
+const js=app.outputFiles.find(f=>f.path.endsWith('.js'))||app.outputFiles[0];
+const css=app.outputFiles.find(f=>f.path.endsWith('.css'))?.text||await readFile('src/styles.css','utf8');
+const safe=s=>s.replace(/<\/script/gi,'<\\/script');
+const notices=await readFile('THIRD_PARTY_NOTICES.txt','utf8');
+const html='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Edu3d: editor CAD paramétrico personal con OpenCascade, importación STL y STEP."><title>Edu3d · Editor CAD</title><style>'+css+'</style></head><body><div id="root"></div><script>window.__EDU3D_WORKER_SOURCE__='+safe(JSON.stringify(worker.outputFiles[0].text))+';</script><script>'+safe(js.text)+'</script></body></html>';
+const licensedHtml=html.replace('</head>','<script type="text/plain" id="third-party-notices">'+safe(notices)+'</script></head>');
+await mkdir('dist',{recursive:true});await writeFile('dist/index.html',licensedHtml);await writeFile('dist/Edu3d-Editor.html',licensedHtml);
+console.log('HTML autónomo: '+(Buffer.byteLength(licensedHtml)/1048576).toFixed(1)+' MiB, OpenCascade incluido.');
